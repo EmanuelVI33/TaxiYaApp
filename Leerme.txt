@@ -1,0 +1,2 @@
+//Abrir con shell
+Fluter run
