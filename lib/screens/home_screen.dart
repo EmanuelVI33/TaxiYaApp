@@ -15,14 +15,8 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
-    final homeProvider = Provider.of<HomeProvider>(context, listen: false);
+    final homeProvider = Provider.of<HomeProvider>(context);
 
     return MaterialApp(
       debugShowCheckedModeBanner: false,
@@ -39,10 +33,13 @@ class _HomeScreenState extends State<HomeScreen> {
                 homeProvider.actualPage = index;
               });
             },
-            items: const [
-              BottomNavigationBarItem(
-                  icon: Icon(Icons.home), label: 'Principal'),
-              BottomNavigationBarItem(
+            items: [
+              homeProvider.isDriver
+                  ? const BottomNavigationBarItem(
+                      icon: Icon(Icons.map_rounded), label: 'Modo conductor')
+                  : const BottomNavigationBarItem(
+                      icon: Icon(Icons.home), label: 'Principal'),
+              const BottomNavigationBarItem(
                   icon: Icon(Icons.map_rounded), label: 'Viajar'),
             ]),
       ),
