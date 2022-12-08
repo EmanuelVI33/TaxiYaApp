@@ -14,19 +14,21 @@ class UserScreen extends StatelessWidget {
         : Center(
             child: Column(
               children: [
-                Text(userProvider.nombre),
+                
+                
+                Image.asset("assets/no-image.png",width: 200, height: 200) , 
+                Text(userProvider.nombre+' '+ userProvider.apellido,style: TextStyle(
+                  fontSize: 30, fontWeight: FontWeight.bold, 
+                ),),
                 const SizedBox(
                   height: 10,
+
                 ),
-                Text(userProvider.apellido),
-                const SizedBox(
-                  height: 10,
-                ),
-                Text(userProvider.telefono),
-                const SizedBox(
-                  height: 10,
-                ),
-                Text(userProvider.email),
+
+                
+                Text(userProvider.email, style: TextStyle(
+                  fontSize: 20
+                )),
                 const SizedBox(
                   height: 10,
                 ),
@@ -36,6 +38,15 @@ class UserScreen extends StatelessWidget {
                 //         userProvider.image,
                 //         fit: BoxFit.cover,
                 //       ),
+
+                MaterialButton(
+                minWidth: 200.0,
+                height: 40.0,
+                onPressed: () {},
+                color: Colors.lightBlue,
+                shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(30.0)),
+                child: Text('Actualizar Datos', style: TextStyle(color: Colors.white)),
+              )
               ],
             ),
           );
