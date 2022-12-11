@@ -42,7 +42,6 @@ class _UserScreenState extends State<UserScreen> {
   @override
   Widget build(BuildContext context) {
     final userProvider = Provider.of<UserProvider>(context);
-
     if (userProvider.loading) {
       return const CircularProgressIndicator();
     } else {
