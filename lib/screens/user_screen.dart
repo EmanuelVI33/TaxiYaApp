@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:taxi_ya/constant.dart';
 import 'package:taxi_ya/models/models.dart';
 import 'package:taxi_ya/providers/providers.dart';
 import 'package:taxi_ya/services/services.dart';
@@ -21,12 +22,10 @@ class _UserScreenState extends State<UserScreen> {
     ApiResponse response = await user.show(userId);
     if (response.error == null) {
       final user = response.data as User;
-      userProvider.id = user.id;
-      userProvider.nombre = user.nombre;
-      userProvider.apellido = user.apellido;
-      userProvider.telefono = user.telefono;
-      userProvider.email = user.email;
-      userProvider.image = user.image;
+      userProvider.setUser(user.id, user.nombre, user.apellido, user.telefono,
+          user.email, user.image, user.isDriver);
+    } else {
+      Navigator.popAndPushNamed(context, 'login');
     }
   }
 
@@ -43,58 +42,57 @@ class _UserScreenState extends State<UserScreen> {
   @override
   Widget build(BuildContext context) {
     final userProvider = Provider.of<UserProvider>(context);
-
-    return userProvider.loading
-        ? const CircularProgressIndicator()
-        : Center(
-            child: Column(
-              children: [
-                
-                
-                Image.asset("assets/no-image.png",width: 200, height: 200) , 
-                Text(userProvider.nombre+' '+ userProvider.apellido,style: TextStyle(
-                  fontSize: 30, fontWeight: FontWeight.bold, 
-                ),),
-                const SizedBox(
-                  height: 10,
-
-                ),
-
-                
-                Text(userProvider.email, style: TextStyle(
-                  fontSize: 20
-                )),
-                const SizedBox(
-                  height: 10,
-                ),
-                // userProvider.image == ''
-                //     ? Image.asset('no-image.png')
-                //     : Image.network(
-                //         userProvider.image,
-                //         fit: BoxFit.cover,
-                //       ),
-
-                MaterialButton(
-                minWidth: 200.0,
-                height: 40.0,
-                onPressed: () {},
-                color: Colors.lightBlue,
-                shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(30.0)),
-                child: Text('Actualizar Datos', style: TextStyle(color: Colors.white)),
-              ),
-                userProvider.image != ''
-                    ? const Image(
-                        image: AssetImage('assets/no-image.png'),
-                        fit: BoxFit.cover,
-                        width: 300,
-                        height: 200,
-                      )
-                    : const Image(
-                        image: NetworkImage(
-                            'http://192.168.0.8/storage/cliente/8xnHBA73nPkphA7zMLV6Y6qhSEcxzEwYzeN0X99n.png'),
-                      ),
-              ],
+    if (userProvider.loading) {
+      return const CircularProgressIndicator();
+    } else {
+      return Center(
+        child: Column(
+          children: [
+            Text(userProvider.nombre),
+            const SizedBox(
+              height: 10,
             ),
-          );
+            Text(userProvider.apellido),
+            const SizedBox(
+              height: 10,
+            ),
+            Text(userProvider.telefono),
+            const SizedBox(
+              height: 10,
+            ),
+            Text(userProvider.email),
+            const SizedBox(
+              height: 10,
+            ),
+            TextButton(
+                onPressed: () {
+                  print('$url/${userProvider.image}');
+                },
+                child: Text("Ver url imagen")),
+            (userProvider.image == null || userProvider.image == '')
+                ? const Image(
+                    image: AssetImage('assets/no-image.png'),
+                    fit: BoxFit.cover,
+                    width: 300,
+                    height: 200,
+                  )
+                : FadeInImage(
+                    placeholder: const AssetImage('assets/no-image.png'),
+                    image: NetworkImage('$url/${userProvider.image}'),
+                    width: double.infinity, // Se ajusta a la pantalla
+                    fit: BoxFit
+                        .cover, // Para que se ajuste la imagen a la altura
+                    fadeInDuration: const Duration(
+                        milliseconds:
+                            200), // Duración de la tracción de la imagen
+                  ),
+            // : Image(
+            //     // http://192.168.0.8/storage/cliente/8xnHBA73nPkphA7zMLV6Y6qhSEcxzEwYzeN0X99n.png
+            //     image: NetworkImage('$url/${userProvider.image}'),
+            //   ),
+          ],
+        ),
+      );
+    }
   }
 }
